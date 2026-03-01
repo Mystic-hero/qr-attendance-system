@@ -92,9 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = true;
 
         try {
-            // Call backend API
-            const backendHost = window.location.hostname || '127.0.0.1';
-            const response = await fetch(`http://${backendHost}:8080/api/auth/register`, {
+            // Call backend API (Relative path for deployment)
+            const response = await fetch(`/api/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
