@@ -1,5 +1,5 @@
 # Step 1: Build the application
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM maven:3.8-eclipse-temurin-17 AS build
 WORKDIR /app
 
 # Copy the backend files specifically
@@ -10,7 +10,7 @@ COPY backend/src backend/src
 RUN mvn -f backend/pom.xml clean package -DskipTests
 
 # Step 2: Run the application
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 
 # Copy the built JAR from the build stage
