@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Room - QR Attendance</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Styles -->
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="qr-room.css">
+</head>
+
+<body>
+    <!-- Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="home.html" class="nav-brand">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>QR Attendance</span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+                <a href="home.html" class="nav-link">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="profile.html" class="nav-link">
+                    <i class="fa-solid fa-user"></i> Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="subjects.html" class="nav-link">
+                    <i class="fa-solid fa-book"></i> Subjects
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="records.html" class="nav-link">
+                    <i class="fa-solid fa-clipboard-list"></i> Records
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="qr-room.html" class="nav-link active">
+                    <i class="fa-solid fa-qrcode"></i> QR Room
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link logout-link" onclick="logout(); return false;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </li>
+        </ul>
+
+        <a href="profile.html" class="user-profile">
+            <div class="user-info">
+                <span class="user-name" id="teacherName">Teacher Name</span>
+                <span class="user-role">Faculty ID: 1024</span>
+            </div>
+            <div class="profile-pic" id="profilePic">TN</div>
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="qr-container">
+            <div class="qr-header">
+                <h1><i class="fa-solid fa-qrcode"></i> QR Generation Room</h1>
+                <p>Select a subject and generate a QR code for the session</p>
+            </div>
+
+            <div class="qr-setup-card">
+                <div class="input-group">
+                    <label for="subjectSelect">Select Subject</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-book input-icon"></i>
+                        <select id="subjectSelect" required>
+                            <option value="" disabled selected>Choose a subject...</option>
+                            <!-- Subjects will be loaded here -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group" id="ipInputGroup">
+                    <label for="serverIp">Server IP / Hostname (Optional)</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-network-wired input-icon"></i>
+                        <input type="text" id="serverIp" placeholder="e.g., 192.168.1.5">
+                    </div>
+                    <small style="color: var(--text-secondary); font-size: 11px; margin-top: 4px; display: block;">
+                        Leave empty if using same machine. Enter local IP for students to scan.
+                    </small>
+                </div>
+
+                <div class="qr-display-area" id="qrDisplayArea">
+                    <div id="qrcode"></div>
+                    <div class="qr-placeholder" id="qrPlaceholder">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <p>QR Code will appear here</p>
+                    </div>
+                </div>
+
+                <div class="session-info" id="sessionInfo" style="display: none;">
+                    <div class="info-item">
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="sessionTime">Session started: --:--</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-users"></i>
+                        <span id="attendanceCount">Attendance: 0 Present</span>
+                    </div>
+                </div>
+
+                <div id="noSubjectsHelp"
+                    style="display: none; margin-bottom: 20px; padding: 12px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; font-size: 13px; color: var(--text-secondary); text-align: center;">
+                    <p><i class="fa-solid fa-circle-info"></i> No subjects found. <a href="subjects.html"
+                            style="color: var(--primary-color);">Create one here</a> or <a href="#"
+                            onclick="generateDemoSubjects(); return false;"
+                            style="color: var(--primary-color);">Generate Demo Data</a> to test.</p>
+                </div>
+
+                <div class="qr-actions">
+                    <button class="btn-primary" id="generateBtn">
+                        <i class="fa-solid fa-gear"></i>
+                        Generate QR Code
+                    </button>
+                    <button class="btn-secondary" id="stopBtn"
+                        style="display: none; background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2);">
+                        <i class="fa-solid fa-stop-circle"></i>
+                        Stop Session
+                    </button>
+                    <button class="btn-secondary" id="copyLinkBtn" style="display: none;">
+                        <i class="fa-solid fa-copy"></i>
+                        Copy Link
+                    </button>
+                    <a href="records.html" class="btn-secondary">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        View Records
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth-check.js"></script>
+    <script src="qr-room.js"></script>
+</body>
+
+</html>

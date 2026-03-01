@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Attendance - My Subjects</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="subjects.css">
+</head>
+
+<body>
+    <!-- Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="home.html" class="nav-brand">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>QR Attendance</span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+                <a href="home.html" class="nav-link">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="profile.html" class="nav-link">
+                    <i class="fa-solid fa-user"></i> Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="subjects.html" class="nav-link active">
+                    <i class="fa-solid fa-book"></i> Subjects
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="records.html" class="nav-link">
+                    <i class="fa-solid fa-clipboard-list"></i> Records
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="qr-room.html" class="nav-link">
+                    <i class="fa-solid fa-qrcode"></i> QR Room
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link logout-link" onclick="logout(); return false;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </li>
+        </ul>
+
+        <a href="profile.html" class="user-profile">
+            <div class="user-info">
+                <span class="user-name" id="teacherName">Teacher Name</span>
+                <span class="user-role">Faculty ID: 1024</span>
+            </div>
+            <div class="profile-pic" id="profilePic">TN</div>
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <h1><i class="fa-solid fa-book-open"></i> My Subjects</h1>
+                <p>Manage your assigned subjects and course details</p>
+            </div>
+            <button class="btn-add-subject" id="addSubjectBtn">
+                <i class="fa-solid fa-plus"></i>
+                <span>Add Subject</span>
+            </button>
+        </div>
+
+        <!-- Subjects Grid -->
+        <div class="subjects-grid" id="subjectsGrid">
+            <!-- Subjects will be dynamically added here -->
+        </div>
+
+        <!-- Empty State (shown when no subjects) -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">
+                <i class="fa-solid fa-book"></i>
+            </div>
+            <h3>No Subjects Yet</h3>
+            <p>Click the "Add Subject" button to get started</p>
+        </div>
+    </div>
+
+    <!-- Add Subject Modal -->
+    <div class="modal" id="addSubjectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-plus-circle"></i> Select Subject</h2>
+                <button class="modal-close" id="closeModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="addSubjectForm">
+                <div class="input-group">
+                    <label for="degreeSelect">Select Degree</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-graduation-cap input-icon"></i>
+                        <select id="degreeSelect" required>
+                            <option value="" disabled selected>Choose Degree...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="yearSelect">Select Year</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-alt input-icon"></i>
+                        <select id="yearSelect" required disabled>
+                            <option value="" disabled selected>Choose Year...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="subjectSelect">Select Subject</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-book input-icon"></i>
+                        <select id="subjectSelect" required disabled>
+                            <option value="" disabled selected>Choose Subject...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="students">Number of Students</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-users input-icon"></i>
+                        <input type="number" id="students" placeholder="e.g., 45" min="1" required>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-primary" id="submitSubjectBtn" disabled>Add Subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="auth-check.js"></script>
+    <script src="subjects.js"></script>
+</body>
+
+</html>

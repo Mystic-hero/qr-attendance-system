@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Attendance - Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="navbar.css">
+    <style>
+        /* Dashboard Specific Styles */
+        body {
+            display: block;
+            /* Override flex execution from login.css */
+            padding-top: 70px;
+            /* Space for fixed navbar */
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 2;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .welcome-text h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .date-display {
+            color: var(--text-secondary);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card-title {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .card-arrow {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="#" class="nav-brand">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>QR Attendance</span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+                <a href="home.html" class="nav-link active">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="profile.html" class="nav-link">
+                    <i class="fa-solid fa-user"></i> Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="subjects.html" class="nav-link">
+                    <i class="fa-solid fa-book"></i> Subjects
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="records.html" class="nav-link">
+                    <i class="fa-solid fa-clipboard-list"></i> Records
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="qr-room.html" class="nav-link">
+                    <i class="fa-solid fa-qrcode"></i> QR Room
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link logout-link" onclick="logout(); return false;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </li>
+        </ul>
+
+        <a href="profile.html" class="user-profile">
+            <div class="user-info">
+                <span class="user-name" id="teacherName">Teacher Name</span>
+                <span class="user-role">Faculty ID: 1024</span>
+            </div>
+            <div class="profile-pic" id="profilePic">TN</div>
+        </a>
+    </nav>
+
+    <!-- Main Dashboard Content -->
+    <div class="main-content">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1 id="welcomeMessage">Welcome back, <span class="welcome-name">Teacher</span>!</h1>
+                <div class="date-display">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span id="currentDate">Monday, January 1, 2026</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Subjects Card -->
+            <a href="subjects.html" class="card">
+                <div class="card-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <h3 class="card-title">My Subjects</h3>
+                <p class="card-desc">Manage your assigned subjects, view syllabus, and update course details.</p>
+                <i class="fa-solid fa-arrow-right card-arrow"></i>
+            </a>
+
+            <!-- Records Card -->
+            <a href="records.html" class="card">
+                <div class="card-icon">
+                    <i class="fa-solid fa-clipboard-user"></i>
+                </div>
+                <h3 class="card-title">Attendance Records</h3>
+                <p class="card-desc">View daily attendance logs, student statistics, and export reports.</p>
+                <i class="fa-solid fa-arrow-right card-arrow"></i>
+            </a>
+
+            <!-- QR Room Card -->
+            <a href="qr-room.html" class="card">
+                <div class="card-icon">
+                    <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <h3 class="card-title">QR Code Room</h3>
+                <p class="card-desc">Generate dynamic QR codes for live attendance sessions instantly.</p>
+                <i class="fa-solid fa-arrow-right card-arrow"></i>
+            </a>
+
+            <!-- Profile/Settings Card -->
+            <a href="profile.html" class="card">
+                <div class="card-icon">
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+                <h3 class="card-title">Settings</h3>
+                <p class="card-desc">Update your profile, change password, and manage system preferences.</p>
+                <i class="fa-solid fa-arrow-right card-arrow"></i>
+            </a>
+        </div>
+    </div>
+
+    <script src="auth-check.js"></script>
+    <script src="home.js"></script>
+</body>
+
+</html>

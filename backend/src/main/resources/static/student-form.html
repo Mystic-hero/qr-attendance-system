@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance - QR Attendance</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="login.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .student-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .card-header .icon-container {
+            margin: 0 auto 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .session-tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        #successMessage {
+            text-align: center;
+            display: none;
+        }
+
+        #successMessage i {
+            font-size: 64px;
+            color: #22c55e;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="student-card">
+        <div id="attendanceForm">
+            <div class="card-header">
+                <div class="icon-container">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div id="sessionContext">
+                    <span class="session-tag" id="subjectTag">Loading session...</span>
+                </div>
+                <h1>Student Attendance</h1>
+                <p>Please enter your details to mark attendance</p>
+            </div>
+
+            <form id="student-form">
+                <div class="input-group">
+                    <label for="studentName">Full Name</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-user input-icon"></i>
+                        <input type="text" id="studentName" placeholder="Enter your name" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="rollNumber">Roll Number</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-id-card input-icon"></i>
+                        <input type="text" id="rollNumber" placeholder="Enter your roll number" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    Submit Attendance
+                </button>
+            </form>
+        </div>
+
+        <div id="successMessage">
+            <i class="fa-solid fa-circle-check"></i>
+            <h2>Attendance Marked!</h2>
+            <p>Your attendance has been successfully recorded for this session.</p>
+            <p style="margin-top: 20px; color: var(--text-secondary); font-size: 14px;">You can now close this tab.</p>
+        </div>
+    </div>
+
+    <script src="student-form.js"></script>
+</body>
+
+</html>

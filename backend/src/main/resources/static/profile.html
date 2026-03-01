@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Attendance - Profile</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="profile.css">
+</head>
+
+<body>
+    <!-- Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="home.html" class="nav-brand">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>QR Attendance</span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li class="nav-item">
+                <a href="home.html" class="nav-link">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="profile.html" class="nav-link active">
+                    <i class="fa-solid fa-user"></i> Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="subjects.html" class="nav-link">
+                    <i class="fa-solid fa-book"></i> Subjects
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="records.html" class="nav-link">
+                    <i class="fa-solid fa-clipboard-list"></i> Records
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="qr-room.html" class="nav-link">
+                    <i class="fa-solid fa-qrcode"></i> QR Room
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link logout-link" onclick="logout(); return false;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </li>
+        </ul>
+
+        <a href="profile.html" class="user-profile">
+            <div class="user-info">
+                <span class="user-name" id="teacherName">Teacher Name</span>
+                <span class="user-role">Faculty ID: 1024</span>
+            </div>
+            <div class="profile-pic" id="profilePic">TN</div>
+        </a>
+    </nav>
+
+    <!-- Main Profile Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1>
+                <i class="fa-solid fa-user-circle"></i>
+                My Profile
+            </h1>
+            <p>Manage your account information and settings</p>
+        </div>
+
+        <div class="profile-container">
+            <!-- Section 1: Staff Details (Read-Only) -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fa-solid fa-id-card"></i>
+                        Staff Information
+                    </h2>
+                    <span class="badge">Read-Only</span>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>
+                            <i class="fa-solid fa-hashtag"></i>
+                            Staff ID
+                        </label>
+                        <div class="info-value" id="displayStaffId">1024</div>
+                    </div>
+
+                    <div class="info-item">
+                        <label>
+                            <i class="fa-solid fa-user"></i>
+                            Full Name
+                        </label>
+                        <div class="info-value" id="displayName">ABCD</div>
+                    </div>
+
+                    <div class="info-item">
+                        <label>
+                            <i class="fa-solid fa-building"></i>
+                            Department
+                        </label>
+                        <div class="info-value" id="displayDepartment">Computer Science</div>
+                    </div>
+
+                    <div class="info-item">
+                        <label>
+                            <i class="fa-solid fa-envelope"></i>
+                            Email Address
+                        </label>
+                        <div class="info-value" id="displayEmail">staff@example.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Edit Profile -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Edit Profile
+                    </h2>
+                    <span class="badge badge-editable">Editable</span>
+                </div>
+
+                <form id="profileForm" class="profile-form">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="editName">
+                                <i class="fa-solid fa-user"></i>
+                                Full Name
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-user input-icon"></i>
+                                <input type="text" id="editName" placeholder="Enter your full name" required>
+                            </div>
+                            <span class="error-message" id="nameError"></span>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="editEmail">
+                                <i class="fa-solid fa-envelope"></i>
+                                Email Address
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-envelope input-icon"></i>
+                                <input type="email" id="editEmail" placeholder="Enter your email" required>
+                            </div>
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="currentPassword">
+                                <i class="fa-solid fa-lock"></i>
+                                Current Password
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-lock input-icon"></i>
+                                <input type="password" id="currentPassword" placeholder="Enter current password">
+                                <i class="fa-solid fa-eye toggle-password" id="toggleCurrent"></i>
+                            </div>
+                            <span class="error-message" id="currentPasswordError"></span>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="newPassword">
+                                <i class="fa-solid fa-key"></i>
+                                New Password
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-key input-icon"></i>
+                                <input type="password" id="newPassword" placeholder="Enter new password">
+                                <i class="fa-solid fa-eye toggle-password" id="toggleNew"></i>
+                            </div>
+                            <span class="error-message" id="newPasswordError"></span>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="confirmPassword">
+                                <i class="fa-solid fa-check-double"></i>
+                                Confirm New Password
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-check-double input-icon"></i>
+                                <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                                <i class="fa-solid fa-eye toggle-password" id="toggleConfirm"></i>
+                            </div>
+                            <span class="error-message" id="confirmPasswordError"></span>
+                        </div>
+                    </div>
+
+                    <div class="password-hint">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Leave password fields empty if you don't want to change your password
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelBtn">
+                            <i class="fa-solid fa-xmark"></i>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Update Profile
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Section 3: Account Actions -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fa-solid fa-shield-halved"></i>
+                        Account Actions
+                    </h2>
+                </div>
+                <div class="account-actions">
+                    <p class="action-desc">Sign out of your account safely to protect your data.</p>
+                    <button type="button" class="btn-logout" onclick="logout()">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Sign Out / Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast Notification -->
+    <div class="toast" id="successToast">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMessage">Profile updated successfully!</span>
+    </div>
+
+    <script src="auth-check.js"></script>
+    <script src="profile.js"></script>
+</body>
+
+</html>
